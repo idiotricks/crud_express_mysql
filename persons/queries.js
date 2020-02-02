@@ -1,16 +1,17 @@
-var database = require('../settings/database');
+var expresso = require('../expresso');
 
 
 exports.all = function(req) {
   return new Promise((resolve, reject) => {
     try {
       const query = 'SELECT * FROM person';
-      database.query(query, (err, rows, fields) => {
+      expresso.databases.ExpressoMySQL.query(query, (err, rows) => {
         if (err) {
           reject(err);
+        } else {
+          resolve(rows);
         }
   
-        resolve(rows);
       });
     } catch (err) {
       reject(err.toString());
@@ -23,8 +24,7 @@ const get = exports.get = (req) => {
     try {
       const id = req.params ? req.params.id : req;
       const query = 'SELECT * FROM person WHERE id=?';
-  
-      database.query(query, [id], (err, rows, fields) => {
+      expresso.databases.ExpressoMySQL.query(query, [id], (err, rows, fields) => {
         if (err) {
           reject(err);
         }
@@ -41,8 +41,8 @@ exports.create = (req) => {
   const name = req.body.name || 'No Name';
   return new Promise((resolve, reject) => {
     try {
-      database.query('INSERT INTO person (name) VALUES (?)', [name], 
-        (err, rows, fields) => {
+      expresso.databases.ExpressoMySQL.query('INSERT INTO person (name) VALUES (?)', [name], 
+        (err, rows) => {
           if (err) { reject(err); }
           get(rows.insertId)
             .then(rows => resolve(rows))
@@ -63,7 +63,7 @@ exports.update = (req) => {
       const query = 'UPDATE person SET name=? WHERE id=?';
       const name = req.body.name || person.name;
       
-      database.query(query, [name, id], async (err, rows, fields) => {
+      expresso.databases.ExpressoMySQL.query(query, [name, id], async (err, rows, fields) => {
         if (err) {
           reject(err);
         }
@@ -84,8 +84,7 @@ exports.delete = (req) => {
     const id = req.params.id;
     const query = "DELETE FROM person WHERE id=?";
     return new Promise((resolve, reject) => {
-      database.query(query, [id], (err, rows, fields) => {
-        console.log(fields);
+      expresso.databases.ExpressoMySQL.query(query, [id], (err, rows) => {
         if (err) { reject(err); }
         resolve(rows);
       })

@@ -1,9 +1,10 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
+var expresso = require('./expresso');
 
-var parser = require('./settings/parser');
-var route = require('./settings/route');
-var serve = require('./settings/serve');
 
-parser(app);
-route(app);
-serve(app);
+expresso.cors.ExpressoCORS(app)
+expresso.middlewares.ExpressoMainMiddlware(app)
+expresso.parsers.ExpressoJSONParser(app)
+expresso.routers.ExpressoRouter(app)
+expresso.servers.ExpressoServer(app)

@@ -1,6 +1,5 @@
 var mysql = require('mysql');
 
-
 DATABASE = {
   host: 'localhost',
   user: 'root',
@@ -8,9 +7,10 @@ DATABASE = {
   database: 'crud_express'
 }
 
-var conn = mysql.createConnection(DATABASE)
+conn = mysql.createConnection(DATABASE)
 conn.connect(function(err) {
   if (err) throw err;
 });
 
-module.exports = conn;
+exports.ExpressoMySQL = conn;
+
